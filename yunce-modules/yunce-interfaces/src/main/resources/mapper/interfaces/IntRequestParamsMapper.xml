@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunce.interfaces.mapper.IntRequestParamsMapper">
+
+    <resultMap type="IntRequestParams" id="IntRequestParamsResult">
+        <result property="paramsName"    column="params_name"    />
+        <result property="paramsDesc"    column="params_desc"    />
+        <result property="paramsType"    column="params_type"    />
+        <result property="type"    column="type"    />
+        <result property="infoId"    column="info_id"    />
+        <result property="must"    column="must"    />
+        <result property="id"    column="id"    />
+    </resultMap>
+
+    <sql id="selectIntRequestParamsVo">
+        select params_name, params_desc, params_type, type, info_id, must, id from int_request_params
+    </sql>
+
+    <select id="selectIntRequestParamsList" parameterType="IntRequestParams" resultMap="IntRequestParamsResult">
+        <include refid="selectIntRequestParamsVo"/>
+        <where>
+            <if test="paramsName != null  and paramsName != ''"> and params_name like concat('%', #{paramsName}, '%')</if>
+            <if test="paramsDesc != null  and paramsDesc != ''"> and params_desc = #{paramsDesc}</if>
+            <if test="paramsType != null  and paramsType != ''"> and params_type = #{paramsType}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="infoId != null "> and info_id = #{infoId}</if>
+            <if test="must != null  and must != ''"> and must = #{must}</if>
+        </where>
+    </select>
+
+    <select id="selectIntRequestParamsById" parameterType="IntRequestParams" resultMap="IntRequestParamsResult">
+        <include refid="selectIntRequestParamsVo"/>
+        where info_id = #{id}
+    </select>
+
+    <insert id="insertIntRequestParams" parameterType="IntRequestParams">
+        insert into int_request_params
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="paramsName != null">params_name,</if>
+            <if test="paramsDesc != null">params_desc,</if>
+            <if test="paramsType != null">params_type,</if>
+            <if test="type != null">type,</if>
+            <if test="infoId != null">info_id,</if>
+            <if test="must != null">must,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="paramsName != null">#{paramsName},</if>
+            <if test="paramsDesc != null">#{paramsDesc},</if>
+            <if test="paramsType != null">#{paramsType},</if>
+            <if test="type != null">#{type},</if>
+            <if test="infoId != null">#{infoId},</if>
+            <if test="must != null">#{must},</if>
+         </trim>
+    </insert>
+
+    <update id="updateIntRequestParams" parameterType="IntRequestParams">
+        update int_request_params
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="paramsName != null">params_name = #{paramsName},</if>
+            <if test="paramsDesc != null">params_desc = #{paramsDesc},</if>
+            <if test="paramsType != null">params_type = #{paramsType},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="infoId != null">info_id = #{infoId},</if>
+            <if test="must != null">must = #{must},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteIntRequestParamsById" parameterType="Long">
+        delete from int_request_params where id = #{id}
+    </delete>
+
+    <update id="deleteIntRequestParamsByIds" parameterType="String">
+        update int_request_params set is_delect='Y' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

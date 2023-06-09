@@ -1,0 +1,2 @@
+com.yunce.common.log.service.AsyncLogService
+com.yunce.common.log.aspect.LogAspect

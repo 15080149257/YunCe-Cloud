@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunce.interfaces.mapper.IntReturnParamsMapper">
+
+    <resultMap type="IntReturnParams" id="IntReturnParamsResult">
+        <result property="paramsDesc"    column="params_desc"    />
+        <result property="type"    column="type"    />
+        <result property="paramsName"    column="params_name"    />
+        <result property="infoId"    column="info_id"    />
+        <result property="id"    column="id"    />
+    </resultMap>
+
+    <sql id="selectIntReturnParamsVo">
+        select params_desc, type, params_name, info_id, id from int_return_params
+    </sql>
+
+    <select id="selectIntReturnParamsList" parameterType="IntReturnParams" resultMap="IntReturnParamsResult">
+        <include refid="selectIntReturnParamsVo"/>
+        <where>
+            <if test="paramsDesc != null  and paramsDesc != ''"> and params_desc = #{paramsDesc}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="paramsName != null  and paramsName != ''"> and params_name like concat('%', #{paramsName}, '%')</if>
+            <if test="infoId != null "> and info_id = #{infoId}</if>
+        </where>
+    </select>
+
+    <select id="selectIntReturnParamsById" parameterType="IntReturnParams" resultMap="IntReturnParamsResult">
+        <include refid="selectIntReturnParamsVo"/>
+        where info_id = #{id}
+    </select>
+
+    <insert id="insertIntReturnParams" parameterType="IntReturnParams" useGeneratedKeys="true" keyProperty="id">
+        insert into int_return_params
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="paramsDesc != null">params_desc,</if>
+            <if test="type != null">type,</if>
+            <if test="paramsName != null">params_name,</if>
+            <if test="infoId != null">info_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="paramsDesc != null">#{paramsDesc},</if>
+            <if test="type != null">#{type},</if>
+            <if test="paramsName != null">#{paramsName},</if>
+            <if test="infoId != null">#{infoId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateIntReturnParams" parameterType="IntReturnParams">
+        update int_return_params
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="paramsDesc != null">params_desc = #{paramsDesc},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="paramsName != null">params_name = #{paramsName},</if>
+            <if test="infoId != null">info_id = #{infoId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteIntReturnParamsById" parameterType="Long">
+        delete from int_return_params where id = #{id}
+    </delete>
+
+    <update id="deleteIntReturnParamsByIds" parameterType="String">
+        update int_return_params set is_delect='Y' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

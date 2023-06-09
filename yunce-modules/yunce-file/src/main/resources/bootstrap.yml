@@ -1,0 +1,27 @@
+# Tomcat
+server:
+  port: 9300
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: yunce-file
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: 192.168.139.131:8848
+      config:
+        # 配置中心地址
+        server-addr: 192.168.139.131:8848
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-yunce-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+        group: yunce_dev
+        namespace: db7afb88-5db9-4be6-8ec1-f83e8a4ea9d6

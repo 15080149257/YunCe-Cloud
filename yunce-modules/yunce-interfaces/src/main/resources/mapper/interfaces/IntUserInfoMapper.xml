@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunce.interfaces.mapper.IntUserInfoMapper">
+
+    <resultMap type="IntUserInfo" id="IntUserInfoResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="infoId"    column="info_id"    />
+        <result property="totalNum"    column="total_num"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="isDelect"    column="is_delect"    />
+        <result property="leftNum"    column="left_num"    />
+    </resultMap>
+
+    <sql id="selectIntUserInfoVo">
+        select id, user_id, info_id, total_num, status, create_time, update_by, update_time, create_by, is_delect, left_num from int_user_info
+    </sql>
+
+    <select id="selectIntUserInfoList" parameterType="IntUserInfo" resultMap="IntUserInfoResult">
+        <include refid="selectIntUserInfoVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="infoId != null "> and info_id = #{infoId}</if>
+            <if test="totalNum != null "> and total_num = #{totalNum}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="isDelect != null  and isDelect != ''"> and is_delect = #{isDelect}</if>
+            <if test="leftNum != null "> and left_num = #{leftNum}</if>
+        </where>
+    </select>
+
+    <select id="selectIntUserInfoById" parameterType="Long" resultMap="IntUserInfoResult">
+        <include refid="selectIntUserInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertIntUserInfo" parameterType="IntUserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into int_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="infoId != null">info_id,</if>
+            <if test="totalNum != null">total_num,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="isDelect != null">is_delect,</if>
+            <if test="leftNum != null">left_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="infoId != null">#{infoId},</if>
+            <if test="totalNum != null">#{totalNum},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="isDelect != null">#{isDelect},</if>
+            <if test="leftNum != null">#{leftNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateIntUserInfo" parameterType="IntUserInfo">
+        update int_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="infoId != null">info_id = #{infoId},</if>
+            <if test="totalNum != null">total_num = #{totalNum},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="isDelect != null">is_delect = #{isDelect},</if>
+            <if test="leftNum != null">left_num = #{leftNum},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="deleteIntUserInfoById" parameterType="Long">
+        update int_user_info set is_delect='Y' where id = #{id}
+    </update>
+
+    <update id="deleteIntUserInfoByIds" parameterType="String">
+        update int_user_info set is_delect='Y' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>
